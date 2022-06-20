@@ -16,5 +16,4 @@ public class CategoryRepository {
 		categoryVo.setBlog_id(id);
 		sqlSession.insert("category.insert", categoryVo);
 	}
-
 }

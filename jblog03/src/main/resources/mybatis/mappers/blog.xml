@@ -7,4 +7,129 @@
 		insert into blog values(#{id}, #{title}, #{logo} );
 	]]>
 	</insert>
+	
+	<select id="findBlog" resultType="blogvo">
+		<![CDATA[
+			select
+				id, title, logo
+			from
+				blog
+			where
+				id = #{id}
+		]]>
+	</select>
+	
+	<select id="findCategory" resultType="categoryvo">
+		<![CDATA[
+			select 
+				no, name, description, blog_id
+			from 
+				category
+			where 
+				blog_id = #{id }
+		]]>
+	</select>
+	
+	<select id="findPost" resultType="postvo">
+		<choose>
+			<when test="categoryNo!=0 and postNo==0">
+			<![CDATA[
+				select
+					p.no, p.title, p.contents, p.category_no as categoryNo 
+				from 
+					post p, category c
+				where 
+					p.category_no = c.no
+				and
+					c.blog_id = #{id}
+				and 
+					p.category_no = #{categoryNo}
+				order by
+					p.no desc
+			]]>
+			</when>
+ 			<when test="categoryNo!=0 and postNo!=0">
+			<![CDATA[
+				select p.no, p.title, p.contents, p.category_no as categoryNo , c.name
+				from 
+					post p, category c
+				where 
+					p.category_no = c.no
+				and
+					c.blog_id = #{id}
+				and 
+					p.category_no = #{categoryNo}
+				order by
+					p.no desc
+			]]>
+			</when>
+			
+			<otherwise>
+			<![CDATA[
+				select 
+					p.no, p.title, p.contents, p.category_no as categoryNo 
+				from 
+					post p, category c
+				where 
+					p.category_no = c.no 
+				and 
+					c.blog_id = #{id }
+				order by 
+					p.no desc
+			]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="getPost" resultType="postvo" >
+			<choose>
+			<when test="categoryNo != 0 and postNo == 0">
+			<![CDATA[
+				select 
+					p.no, p.title, p.contents
+				from 
+					post p, category c
+				where 
+					p.category_no = c.no
+				and
+					c.blog_id = #{id}
+				and 
+					c.no = #{categoryNo}
+				order by p.no desc
+				limit 1
+			]]>
+			</when>
+			<when test="categoryNo != 0 and postNo != 0">
+			<![CDATA[
+				select 
+					p.no, p.title, p.contents
+				from
+					post p, category c
+				where
+					p.category_no = c.no
+				and
+					c.blog_id = #{id}
+				and
+					p.no = #{postNo}
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+				select
+					p.no, p.title, p.contents
+				from
+					post p, category c
+				where
+					p.category_no = c.no
+				and
+					c.blog_id = #{id}
+				order by p.no desc
+				limit 1		
+			]]>
+			</otherwise>
+			
+			
+		</choose>
+	</select>
 </mapper>

@@ -7,4 +7,5 @@
 			insert into category values(null, #{name}, #{description}, #{blog_id});
 		]]>
 	</insert>
+
 </mapper>

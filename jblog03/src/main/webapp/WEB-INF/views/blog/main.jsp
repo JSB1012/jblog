@@ -14,14 +14,17 @@
 </head>
 <body>
 	<div id="container">
-		<c:import url="/WEB-INF/views/includes/header.jsp" />
+		<c:import url="/WEB-INF/views/includes/blog_header.jsp" />
 		<div id="wrapper">
 			<div id="content">
 				<div class="blog-content" style="height: 300px;">
-					<h4>${postVo.title }</h4>
+					<c:if test="${!empty postVo.title }">
+						<h4>${postVo.title }  / 카테고리 - ${postVo.name } /</h4>
+					</c:if>
 					<p>${fn:replace(postVo.contents, newLine, "<br>")}<p>
 				</div>
 				<ul class="blog-list">
+					<li>카테고리 포스트 목록 </li>
 					<c:forEach items="${postList }" var="post" varStatus="status">
 						<c:choose>
 							<c:when test="${post.no eq postVo.no }">

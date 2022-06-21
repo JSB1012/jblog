@@ -35,7 +35,7 @@
 
 	<!-- Annotation 설정하면 찾는다. 검색 위치 base_package -->
 	<context:annotation-config />
-	<context:component-scan base-package="com.douzone.jblog.service, com.douzone.jblog.repository">
+	<context:component-scan base-package="com.douzone.jblog.aspect, com.douzone.jblog.service, com.douzone.jblog.repository">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />

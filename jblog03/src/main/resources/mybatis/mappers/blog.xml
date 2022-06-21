@@ -35,7 +35,7 @@
 			<when test="categoryNo!=0 and postNo==0">
 			<![CDATA[
 				select
-					p.no, p.title, p.contents, p.category_no as categoryNo 
+					p.no, p.title, p.contents, p.category_no as categoryNo, c.name
 				from 
 					post p, category c
 				where 
@@ -81,13 +81,13 @@
 		</choose>
 	</select>
 	
-	
+	<!-- Post 가져올때 categoryNo만 있는 경우, categoryNo,postNo 모두 있는 경우, Default만 있는 경우 -->
 	<select id="getPost" resultType="postvo" >
 			<choose>
 			<when test="categoryNo != 0 and postNo == 0">
 			<![CDATA[
 				select 
-					p.no, p.title, p.contents
+					p.no, p.title, p.contents, c.name
 				from 
 					post p, category c
 				where 
@@ -103,7 +103,7 @@
 			<when test="categoryNo != 0 and postNo != 0">
 			<![CDATA[
 				select 
-					p.no, p.title, p.contents
+					p.no, p.title, p.contents, c.name
 				from
 					post p, category c
 				where
@@ -117,7 +117,7 @@
 			<otherwise>
 			<![CDATA[
 				select
-					p.no, p.title, p.contents
+					p.no, p.title, p.contents, c.name
 				from
 					post p, category c
 				where
@@ -129,7 +129,105 @@
 			]]>
 			</otherwise>
 			
-			
 		</choose>
 	</select>
+	
+	<select id="findBasic" resultType="blogvo">
+		<![CDATA[
+			select 
+				title, logo
+			from 
+				blog
+			where 
+				id = #{id} 
+		]]>
+	</select>
+	
+	<update id="updateBasic" parameterType="blogvo">
+	<choose>
+			<when test="logo == null">
+				<![CDATA[
+					update 
+						blog
+					set 
+						title = #{title}
+					where
+						id = #{id}
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					update 
+						blog
+					set 
+						title = #{title}, 
+						logo = #{logo}
+					where
+						id = #{id}
+				]]>
+			</otherwise>
+		</choose>
+	</update>
+	
+	<select id="findCategoryPost" resultType="categoryvo">
+		<![CDATA[
+			select 
+                c.no,c.name,c.description,c.blog_id,
+                (select count(*) from post p where category_no=c.no) as postCount
+			from
+				category c 
+			where
+				blog_id=#{id }
+			order by
+				c.no desc
+		]]>
+	</select>
+	
+	<insert id="insertCategory" parameterType="categoryvo">
+		<![CDATA[
+			insert into category values(null, #{name }, #{description }, #{blog_id } )
+		]]>
+	</insert>
+	
+	<delete id="deleteCategory" parameterType="map">
+		
+		<![CDATA[
+			delete from 
+				category
+			where 
+				blog_id = #{id }
+			and 
+				no = #{no }
+		]]>
+
+	</delete>
+	
+	<select id="postWriteCategoryOption" resultType="categoryvo">
+		<![CDATA[
+			select 
+				name, no
+			from 
+				category
+			where 
+				blog_id = #{id}
+		]]>
+	</select>
+	
+	<insert id="writePost" parameterType="map">
+		<![CDATA[
+			insert 
+				into post
+			values
+				(null, #{postVo.title }, #{postVo.contents }, 
+				(select 
+					no
+				 from
+				 	category 
+				 where 
+				 	blog_id=#{id } 
+				 and
+				 	 no=#{postVo.categoryNo }))
+		]]>
+	</insert>
+	
 </mapper>

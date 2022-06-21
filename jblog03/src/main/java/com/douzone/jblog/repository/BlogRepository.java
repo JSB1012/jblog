@@ -47,4 +47,44 @@ public class BlogRepository {
 		return sqlSession.selectOne("blog.getPost", map);
 	}
 
+	public BlogVo findBasic(String id) {
+		return sqlSession.selectOne("blog.findBasic", id);
+	}
+
+	public void updateBasic(BlogVo blogVo) {
+		sqlSession.update("blog.updateBasic", blogVo);
+	}
+
+	public List<CategoryVo> findCategoryPost(String id) {
+		return sqlSession.selectList("blog.findCategoryPost", id);
+	}
+
+	public void insertCategory(CategoryVo categoryVo) {
+		sqlSession.insert("blog.insertCategory", categoryVo);
+	}
+	
+	/** 일반적으로 안되서 Map으로 바꿔서 넣으니까 됨 이유는 아직 잘 모름.**/
+	public boolean deleteCategory(String id, Long no) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
+		map.put("no", no);
+		return sqlSession.delete("blog.deleteCategory", map) == 1;
+	}
+
+	public List<CategoryVo> postWriteCategoryOption(String id) {
+		return sqlSession.selectList("blog.postWriteCategoryOption", id);
+	}
+
+	public void writePost(String id, PostVo postVo) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
+		map.put("postVo", postVo);
+		sqlSession.insert("blog.writePost", map);
+	}
+
+	
+
+
+
+
 }

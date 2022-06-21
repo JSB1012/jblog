@@ -19,9 +19,8 @@
 
 		<!-- 본인 블로그면 	관리 / 로그아웃 -->
 		<c:if test="${blogVo.id eq authUser.id && !empty authUser}">
-			<li><a
-				href="${pageContext.request.contextPath }/${authUser.id }/admin/basic">블로그 관리</a></li>
 			<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
+			<li><a href="${pageContext.request.contextPath }/${authUser.id }/admin/basic">블로그 관리</a></li>
 		</c:if>
 	</ul>
 </div>

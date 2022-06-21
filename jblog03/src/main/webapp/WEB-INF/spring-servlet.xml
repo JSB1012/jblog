@@ -19,9 +19,9 @@
 
 	<!-- <mvc:default-servlet-handler/> 설명 이 코드는 만약 Handler Mapping에 해당하는 URL이 
 		없으면 default-servlet으로 처리하겠다는 의미. 즉 매핑이 되지 않은 URL은 webapp폴더를 시작으로 경로를 찾아가게 
-		되고, 여기에서도 해당 경로의 자원이 존재하지 않으면 404 Not found가 발생합니다. <mvc:annotation-driven/> 
+		되고, 여기에서도 해당 경로의 자원이 존재하지 않으면 404 Not found가 발생. <mvc:annotation-driven/> 
 		같이 사용하는 이유 정적 파일의 경로를 작성할 때 자신의 애플리케이션 경로를 프로젝트 폴더 이름으로 작성하는 것 말고, JSTL 표기법으로 
-		작성할 수도 있습니다. ex)${pageContext.request.contextPath} -->
+		작성할 수도 있다. ex)${pageContext.request.contextPath} -->
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven />
 

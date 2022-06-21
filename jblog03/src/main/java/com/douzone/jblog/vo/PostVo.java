@@ -6,6 +6,8 @@ public class PostVo {
 	private String title;
 	private String contents;
 	private String categoryNo;
+	private String name;
+	
 	public Long getNo() {
 		return no;
 	}
@@ -29,6 +31,12 @@ public class PostVo {
 	}
 	public void setCategoryNo(String categoryNo) {
 		this.categoryNo = categoryNo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	@Override
 	public String toString() {

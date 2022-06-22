@@ -1,10 +1,13 @@
 package com.douzone.jblog.security;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.douzone.jblog.vo.UserVo;
@@ -50,6 +53,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			response.sendRedirect(request.getContextPath()+"/user/login");
+			return false;
+		}
+		
+		/**  @RequestMapping 에서의 Url 정보중 @PathVariable 에 해당하는 정보가 Map 에 담김. 인터넷에서 가져옴... **/
+		Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);		
+		String blogId = (String)pathVariables.get("id");
+		
+		if(authUser.getId().equals(blogId) == false) {
+			response.sendRedirect(request.getContextPath() );
 			return false;
 		}
 		

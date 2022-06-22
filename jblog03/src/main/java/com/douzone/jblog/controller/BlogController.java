@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.douzone.jblog.security.Auth;
 import com.douzone.jblog.security.AuthUser;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.service.FileUploadService;
@@ -53,11 +54,14 @@ public class BlogController {
 	}
 	
 	/** BLOG 기본 관리자 화면 **/
+	@Auth
 	@RequestMapping(value="/admin/basic", method = RequestMethod.GET)
 	public String adminBasic(@PathVariable("id") String id, @AuthUser UserVo authUser, Model model) {
-		if(authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
+		
+//		if(authUser == null || !id.equals(authUser.getId())) {
+//			return "redirect:/main"; } 
+//		-> 기존 auth 체크하던 방식 -> security 패키지 AuthInterceptor 에 메서드 추가로 @Auth 로 대체
+		
 		BlogVo blogVo = blogService.findBasic(id);
 		model.addAttribute("BlogVo", blogVo);
 		return "blog/basic";
@@ -65,15 +69,13 @@ public class BlogController {
 	}
 	
 	/** BLOG 기본 관리자 화면 Update **/
+	@Auth
 	@RequestMapping(value="/admin/basic", method= RequestMethod.POST)
 	public String adminBasic(
 			@PathVariable String id, String title,
 			@RequestParam("logo-file") MultipartFile multipartFile,
 			@AuthUser UserVo authUser) {
-		if(authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
-		
+
 		String url = fileUploadService.restoreImage(multipartFile);
 		// WEB-INF/spring-servlet.xml 맵핑 확인!
 		
@@ -89,20 +91,19 @@ public class BlogController {
 	}
 	
 	/** Category 관리자 화면 **/
+	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.GET)
 	public String adminCategory(
 			@PathVariable("id") String id, 
 			@AuthUser UserVo authUser, Model model) {
-		if(authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
-		
+
 		List<CategoryVo> categoryList = blogService.findCategoryPost(id);
 		model.addAttribute("categoryList", categoryList);
 		return "blog/category";
 	}
 	
 	/** Category 관리자 화면 카테고리 추가 **/
+	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.POST)
 	public String adminCategory(
 			@PathVariable("id") String id, 
@@ -121,41 +122,36 @@ public class BlogController {
 	}
 	
 	/** Category 관리자 화면 카테고리 삭제 **/
+	@Auth
 	@RequestMapping("/admin/category/delete/{no}")
 	public String adminCategory(
 			@PathVariable String id, 
 			@PathVariable ("no") Long no, 
 			@AuthUser UserVo authUser) {
-		if (authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
 		
 		blogService.deleteCategory(id, no);
 		return "redirect:/" + id + "/admin/category";
 	}
 	
 	/** Post 관리자 화면 글 작성 및 카테고리 목록 가져오기 위한 메서드 **/
+	@Auth
 	@RequestMapping(value = "/admin/write", method = RequestMethod.GET)
 	public String postWriteCategoryOption(
 			@PathVariable String id, 
 			Model model, 
 			@AuthUser UserVo authUser) {
-		if (authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
+
 		List<CategoryVo> category = blogService.postWriteCategoryOption(id);
 		model.addAttribute("category", category);
 		return "blog/write";
 	}
 	
 	/** Post 관리자 화면 글 작성 **/
+	@Auth
 	@RequestMapping(value = "/admin/write", method = RequestMethod.POST)
 	public String writePost(@PathVariable("id") String id, @AuthUser UserVo authUser, PostVo postVo) {
 		// 매개변수 객체로 받은 경우
 		
-		if (authUser == null || !id.equals(authUser.getId())) {
-			return "redirect:/main";
-		}
 		blogService.writePost(id, postVo);
 		
 		return "redirect:/" + id;

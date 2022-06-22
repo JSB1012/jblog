@@ -77,7 +77,7 @@ public class BlogService {
 		blogRepository.deleteCategory(id,no);
 	}
 	
-	/** Post 관리자 화면 글 작성 및 카테도길 목록 **/
+	/** Post 관리자 화면 글 작성 및 카테고리 목록 **/
 	public List<CategoryVo> postWriteCategoryOption(String id) {
 		return blogRepository.postWriteCategoryOption(id);
 	}

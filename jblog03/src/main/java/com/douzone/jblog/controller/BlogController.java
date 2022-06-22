@@ -60,7 +60,7 @@ public class BlogController {
 		
 //		if(authUser == null || !id.equals(authUser.getId())) {
 //			return "redirect:/main"; } 
-//		-> 기존 auth 체크하던 방식 -> security 패키지 AuthInterceptor 에 메서드 추가로 @Auth 로 대체
+//		-> 기존 auth 체크하던 방식 -> security 패키지 AuthInterceptor 에 추가로 @Auth 로 대체
 		
 		BlogVo blogVo = blogService.findBasic(id);
 		model.addAttribute("BlogVo", blogVo);
